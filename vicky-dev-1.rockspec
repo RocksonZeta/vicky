@@ -1,5 +1,5 @@
 package = "vicky"
-version = "dev-1"
+version = "dev-2"
 source = {
 	url = "git@github.com:RocksonZeta/vicky.git"
 }

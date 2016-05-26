@@ -28,7 +28,7 @@ local METHODS = {
 	all =true		-- means ignore request method
 }
 
-local _M = {_VERSION = "0.1"}
+local _M = {_VERSION = "0.2"}
 function _M:new() 
 	local o = {
 		-- request filters format: {{handle=fn,method=method,pattern=pattern}}
@@ -40,7 +40,8 @@ function _M:new()
 		-- if not handle find this function will be called at last if not nil
 		unhandle = function() ngx.exit(404) end,
 		-- if handle encount an exeption ,error_handle will be called
-		error_handle = function()end
+		error_handle = function()end,
+		props = {}
 	}
 	setmetatable(o,self)
 	self.__index = self
@@ -60,7 +61,7 @@ end
 -- eg. /user/:id -> ^/user/(?<id>\w+)$
 function _M.trans_named_path(path)
 	local new_path = '^'..string_gsub(path,":%w+" , function(n) return '(?<'..string_sub(n ,2)..'>\\w+)'  end)..'$'
-	--ngx.log(ngx.ERR ,path," -> ",new_path)
+	-- ngx.log(ngx.ERR ,path," -> ",new_path)
 	return new_path
 end
 
@@ -68,7 +69,7 @@ function _M:set_methods()
 	for m,_ in pairs(METHODS) do
 		local method = string_lower(m);
 		self[method] = function(self,path,fn)
-			--ngx.log(ngx.ERR, 'add '.. self.method_path(method,path))
+			-- ngx.log(ngx.ERR, 'add '.. self.method_path(method,path))
 			if string_byte('^') == string_byte(path) then	-- regexp path eg. ^/user/(\d)+/$
 				table_insert(self.ex_handles,{handle=fn,method=method,pattern=path})
 			elseif nil ~= string_find(path , ':') then		-- named path eg. /user/:id
@@ -143,7 +144,7 @@ function _M:do_filters(handle,pathParams)
 				self:exe_handle(handle , pathParams)
 			else
 				i = i+1
-				local h,p = self.match_method_path_single(self.get_method(),self.get_uri(),self.filters[i-1]);
+				local h,p = self.match_method_path_single(self:get_method(),self.get_uri(),self.filters[i-1]);
 				if nil~=h then
 					h(next,p)
 				else
@@ -163,7 +164,7 @@ end
 
 -- handle the request
 function _M:handle()
-	local handle,path_params= self:find_handle(self.get_method(), self.get_uri())
+	local handle,path_params= self:find_handle(self:get_method(), self.get_uri())
 	if handle then
 		self:do_filters(handle,path_params)
 	else 
@@ -178,7 +179,10 @@ end
 function _M.get_uri() 
 	return string_lower(ngx_var.uri)
 end
-function _M.get_method() 
+function _M:get_method(self)
+	-- if false~= self.props.method_override then
+
+	-- end
 	return string_lower(ngx_req.get_method())
 end
 
@@ -218,14 +222,13 @@ function _M.__newindex(t, k, v)
 	if i then					-- method handle
 		local m = string_lower(string_sub(k , 1 , i-1))
 		local p = string_lower(string_sub(k ,i+1))
-		if METHODS[m] and string_byte('/') == string_byte(p) then 
+		if METHODS[m] and string_byte('/') == string_byte(p) then
 			t[m](t,p , v)
+			return
 		end
-		return
 	end
-
-
-	ngx.log(ngx.ERR, 'discard AppMeta __newindex '.. k)
+	t.props[k] = v
+	-- ngx.log(ngx.ERR, 'discard AppMeta __newindex '.. k)
 end
 
 return _M

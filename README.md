@@ -19,14 +19,13 @@ local vicky = require('resty.vicky')
 -- as a global variable "app"
 app = vicky:new()
 -- using filters
-app:use("/user/:name",function(next,p)
-	ngx.say("/user/:name "..p.name)
-	next();
-end);
+app['@'] = function(next)
+    ngx.say("filter all requests")
+    next();
+end
 
--- filter for all method
-app['@all /user'] = function(next)
-	ngx.say("hello")
+app['@^/user'] = function(next)
+	ngx.say("filter for /user/*")
 	next();
 end
 
