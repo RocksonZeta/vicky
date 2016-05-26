@@ -110,7 +110,7 @@ method: can be one of [get post put delete patch options head trace all],default
 1. if exact path matched,it will be execute first  
 2. match named path and regexp path by adding order
 
-** app.error_handle=fn(e)**  
+**app.error_handle=fn(e)**  
 ```fn``` will be invoked if error occured in handler
 
 
