@@ -92,21 +92,21 @@ http {
 create new application instance
 
 #### filter usage
-**app[@method path]=fn(params) **  
+**app[@method path]=fn(params)**  
 add request filter,path can be "",for all path
 method can be empty str and then it will filter all methods.eg ```app['@^/test']=fn```
 path can be named path(eg./user/:id) or regular expression(using ngx.re)
 params contains path args
 
 #### handler usage
-** app[method path]=fn(params) **  
+**app[method path]=fn(params)**  
 add request hanndler for specified method and path
 method: can be one of [get post put delete patch options head trace all],default method is ```get``` if method is empty string
-path: path has 3 pattern  
+*path: path has 3 pattern*  
 1. exact path. eg /user  
 2. named param path. eg /user/:id ,id will be in params of fn  
 3. regexp path.eg ^/test/(\w+)$, params will have the group params    
-match order:  
+*match order:*  
 1. if exact path matched,it will be execute first  
 2. match named path and regexp path by adding order
 
