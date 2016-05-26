@@ -113,6 +113,38 @@ method: can be one of [get post put delete patch options head trace all],default
 **app.error_handle=fn(e)**  
 ```fn``` will be invoked if error occured in handler
 
+### Typical opnresty project layout
+```
+|
+|-conf
+    |-nginx.conf
+    |-fastcgi_params
+|-logs
+    |-error.log
+    |-access.log
+|-lua
+    |-resty
+        |-vicky.lua
+        |-cookie.lua
+        |-template.lua
+        |-session.lua
+        |-session
+    |-route
+        |-index.lua
+    |-service
+    |-utils
+    |-view
+    |-conf.lua
+    |-err.lua
+    |-init.lua
+|-public
+    |-css
+    |-js
+    |-img
+|-private
+|-README.md
 
+~ nginx -p `pwd`
+```
 ## License
 MIT
