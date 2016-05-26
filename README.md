@@ -132,7 +132,7 @@ method: can be one of [get post put delete patch options head trace all],default
     |-route
         |-index.lua
     |-service
-    |-utils
+    |-util
     |-view
     |-conf.lua
     |-err.lua
