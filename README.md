@@ -113,7 +113,7 @@ method: can be one of [get post put delete patch options head trace all],default
 **app.error_handle=fn(e)**  
 ```fn``` will be invoked if error occured in handler
 
-### Typical opnresty project layout
+### Typical openresty project layout
 ```
 |
 |-conf
