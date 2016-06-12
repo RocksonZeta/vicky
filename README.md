@@ -92,16 +92,18 @@ http {
 create new application instance
 
 #### filter usage
-**app[@method path]=fn(params)**  
+**app[@method path]=fn(next,params)**  
 add request filter,path can be "",for all path
-method can be empty str and then it will filter all methods.eg ```app['@^/test']=fn```
+method can be empty str and then it will filter all methods.eg `app['@^/test']=fn`
 path can be named path(eg./user/:id) or regular expression(using ngx.re)
 params contains path args
+`next` is a function , invoking next() to pass the request.
+`params` is path params.
 
 #### handler usage
 **app[method path]=fn(params)**  
 add request hanndler for specified method and path
-method: can be one of [get post put delete patch options head trace all],default method is ```get``` if method is empty string
+method: can be one of [get post put delete patch options head trace all],default method is `get` if method is empty string
 *path: path has 3 pattern*  
 1. exact path. eg /user  
 2. named param path. eg /user/:id ,id will be in params of fn  
@@ -111,7 +113,7 @@ method: can be one of [get post put delete patch options head trace all],default
 2. match named path and regexp path by adding order
 
 **app.error_handle=fn(e)**  
-```fn``` will be invoked if error occured in handler
+`fn` will be invoked if error occured in handler
 
 ### Typical openresty project layout
 ```
