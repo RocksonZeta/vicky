@@ -1,7 +1,7 @@
 # vicky
 A restful framework for openresty.
 
-Expressive HTTP middleware for openresty to make web applications and APIs more enjoyable to write. Vicky's middleware stack flows in a stack-like manner, allowing you to perform actions downstream then filter and manipulate the response upstream.
+Expressive HTTP middleware for openresty to make voweb applications and APIs more enjoyable to write. Vicky's middleware stack flows in a stack-like manner, allowing you to perform actions downstream then filter and manipulate the response upstream.
 
 Vicky is not bundled with any middleware.
 
